@@ -8,8 +8,10 @@ import org.apache.flink.api.java.operators.ProjectOperator;
 import org.apache.flink.api.java.operators.ReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.builder.Tuple12Builder;
+import org.apache.flink.table.runtime.aggregate.DistinctReduce;
 
 
 @SuppressWarnings("serial")
@@ -38,12 +40,19 @@ public class FirstFlink {
        // count.print();
         database.print();
 
-        //Multipication des prix pas les quantitee
-        DataSet<Double> Rest = database.map(new Calculator());
+        //Multipication des prix pas les quantites
+        DataSet<Tuple3<Integer, Integer, Double>> Rest = database.map(new Calculator());
 
-        //addition des resultats et ecriture en sortie standard
-         ReduceOperator<Double> sum = Rest.reduce((a, b)->a+b);
+
+        // ReduceOperator<Double> sum = Rest.reduce((a, b)->a+b); //lambda pour add les result
+
+       //Reduce et print
+
+         //put reduce here
+         ReduceOperator<Tuple3<Integer, Integer, Double>> output = Rest
+                 .groupBy(0)
+                 .reduce(new Reduce());
          Rest.print();
-         sum.print();
+         output.print();
     }
 }
