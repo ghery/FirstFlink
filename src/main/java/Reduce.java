@@ -15,7 +15,7 @@ public class Reduce implements ReduceFunction<Tuple3<Integer, Integer, Double>> 
     public Tuple3<Integer, Integer, Double> reduce(Tuple3<Integer, Integer, Double> in, Tuple3<Integer, Integer, Double> out) throws Exception {
         Double sum;
 
-        // add all strings of the group to the set
+        // sum up all in one book
         sum = in.f2 + in.f2;
         out = new Tuple3<Integer, Integer, Double>(in.f0, in.f1, sum);
         return out;
